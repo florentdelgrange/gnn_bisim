@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import tensorflow as tf
@@ -6,6 +6,7 @@ import tensorflow as tf
 from data.dataset import Dataset
 import models.gcn
 import models.gnn
+from models.gnn_bisim import GNNBisim
 
 
 def trainModel(model, dataset, num_epochs=500, debug=False):
@@ -192,27 +193,15 @@ def set4(plot=False):
             plt.savefig(f"{dsname}-gnn-deg.pdf", format="pdf")
             plt.clf()
 
+def bisimulation_set():
+    dsname = "cora"
+    ds = Dataset(dsname, add_degree=False)
+    model = GNNBisim(
+        input_dim=ds.features.shape[1],
+        output_dim=ds.labels_train.shape[1],
+        graph=ds.graph,)
+    model(ds.features)
 
 if __name__ == "__main__":
-    for s in range(3, 5):
-        # for reproducibility, we fix the random seed
-        seed = 123
-        np.random.seed(seed)
-        tf.random.set_seed(seed)
-        # run a set of tests
-        if s == 1:
-            print("== Running test set 1 ==")
-            set1(True)
-        elif s == 2:
-            print("== Running test set 2 ==")
-            set2(True)
-        elif s == 3:
-            print("== Running test set 3 ==")
-            set3(True)
-        elif s == 4:
-            print("== Running test set 4 ==")
-            set4(True)
-        else:
-            print(f"Unexpected test set {s}", file=sys.stderr)
-            exit(1)
+    bisimulation_set()
     exit(0)

@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+    
 
 class Base(tf.keras.Model):
     def __init__(self):
